@@ -55,6 +55,7 @@ public class ArticleFragment extends Fragment implements SwipeRefreshLayout.OnRe
         View view = inflater.inflate(R.layout.fragment_article, container, false);
         ButterKnife.inject(this, view);
         initRefreshView();
+        initAdapter();
         return view;
     }
 
@@ -65,6 +66,7 @@ public class ArticleFragment extends Fragment implements SwipeRefreshLayout.OnRe
     }
 
     private void initRefreshView(){
+        fragmentArticleSwipe.setRefreshing(true);
         fragmentArticleSwipe.setOnRefreshListener(this);
         fragmentArticleRc.setLayoutManager(new LinearLayoutManager(getActivity()
                 .getApplicationContext()));
@@ -115,7 +117,7 @@ public class ArticleFragment extends Fragment implements SwipeRefreshLayout.OnRe
                     mPageIndex++;
                 }
             }
-        };
+        }.execute();
 
     }
     private List<Article> performRequest(int page){
