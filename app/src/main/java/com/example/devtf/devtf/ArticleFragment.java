@@ -33,6 +33,7 @@ import adapters.ArticleAdapter;
 import bean.Article;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import db.DatabaseHelper;
 import listener.OnItemClickListener;
 import view.AutoLoadRecyclerview;
 
@@ -62,7 +63,8 @@ public class ArticleFragment extends Fragment implements SwipeRefreshLayout.OnRe
     @Override
     public void onResume() {
         super.onResume();
-
+        mDataSet.addAll(DatabaseHelper.getInstance().getArticles());
+        adapter.notifyDataSetChanged();
     }
 
     private void initRefreshView(){
@@ -112,7 +114,8 @@ public class ArticleFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 mDataSet.addAll(articles);
                 adapter.notifyDataSetChanged();
                 fragmentArticleSwipe.setRefreshing(false);
-
+//                  // 存储文章列表
+                DatabaseHelper.getInstance().saveArticles(articles);
                 if(articles.size()>0){
                     mPageIndex++;
                 }
@@ -184,11 +187,12 @@ public class ArticleFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
     @Override
     public void onRefresh() {
-
+           getArticles(1);
     }
 
     @Override
     public void onLoad() {
-
+            fragmentArticleSwipe.setRefreshing(true);
+            getArticles(mPageIndex);
     }
 }
