@@ -1,5 +1,8 @@
 package com.example.devtf.devtf;
 
+
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -9,11 +12,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,14 +33,9 @@ public class MainActivity extends AppCompatActivity {
     DrawerLayout mainDrawer;
     @InjectView(R.id.main_framelayout)
     FrameLayout mainFramelayout;
-    @InjectView(R.id.main_user_icon)
-    ImageView mainUserIcon;
-    @InjectView(R.id.main_username)
-    TextView mainUsername;
     @InjectView(R.id.main_rc)
     RecyclerView mainRc;
-    @InjectView(R.id.drawer_layout)
-    LinearLayout drawerLayout;
+
     private FragmentManager mFragmentManager;
     private Fragment mArticleFragment = new ArticleFragment();
     private Fragment mAboutFragment;
@@ -65,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
                 , R.string.drawer_close);
         mDrawerToggle.syncState();
         mainDrawer.setDrawerListener(mDrawerToggle);
-
         mainRc.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         List<MenuItem> items = new ArrayList<>();
         items.add(new MenuItem(getString(R.string.article), R.drawable.home));
@@ -73,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
         items.add(new MenuItem(getString(R.string.exit), R.drawable.exit));
 
         Menuadapter adapter = new Menuadapter(items);
+        Log.i("Menuadapter", "onCreate:测试 "+items.get(0)+"结尾");
         adapter.setOnItemClickListener(new OnItemClickListener<MenuItem>() {
             @Override
             public void OnClick(MenuItem item) {
@@ -80,8 +76,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         mainRc.setAdapter(adapter);
+
+        mFragmentManager=getSupportFragmentManager();
         mFragmentManager.beginTransaction().add(R.id.main_framelayout, mArticleFragment)
-                .commitNowAllowingStateLoss();
+                .commitAllowingStateLoss();
 //        点击菜单项的处理函数
     }
     private void clickMenuItem(MenuItem item) {
@@ -106,9 +104,16 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
     }
-        private void isQuit(){
+    private void isQuit() {
+        AlertDialog.Builder   dialog=new AlertDialog.Builder(this);
+        dialog .setTitle("确认退出?").setPositiveButton("确定", new DialogInterface.OnClickListener() {
 
-
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        }).setNegativeButton("取消", null);
+        dialog.show();
     }
 }
 

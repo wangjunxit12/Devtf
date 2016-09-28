@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -10,22 +9,15 @@
 
     <include
         layout="@layout/toolbar_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+     />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/main_rc"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-    </android.support.v7.widget.RecyclerView>
 
     <android.support.v4.widget.DrawerLayout
     android:id="@+id/main_drawer"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-</android.support.v4.widget.DrawerLayout>
+
 
 <FrameLayout
     android:id="@+id/main_framelayout"
@@ -33,6 +25,13 @@
     android:layout_height="match_parent">
 
 </FrameLayout>
+ <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="#f0f0f0"
+        android:orientation="vertical"
+        >
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="100dp"
@@ -58,4 +57,12 @@
         android:layout_toRightOf="@+id/main_user_icon"
         android:layout_toEndOf="@+id/main_user_icon" />
 </RelativeLayout>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/main_rc"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </android.support.v7.widget.RecyclerView>
+    </LinearLayout>
+    </android.support.v4.widget.DrawerLayout>
 </LinearLayout>

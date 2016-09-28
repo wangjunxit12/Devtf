@@ -15,11 +15,11 @@ public class AutoLoadRecyclerview extends RecyclerView {
      boolean isloading=false;
     boolean isValidDelay = true;
     public AutoLoadRecyclerview(Context context) {
-        super(context);
+        this(context,null);
     }
 
     public AutoLoadRecyclerview(Context context, @Nullable AttributeSet attrs) {
-        super(context, attrs);
+        this(context, attrs,0);
     }
 
     public AutoLoadRecyclerview(Context context, @Nullable AttributeSet attrs, int defStyle) {
@@ -39,9 +39,11 @@ public class AutoLoadRecyclerview extends RecyclerView {
     }
     private void checkLoadMore(int dx,int dy){
         if(isBottom(dx,dy)&&
-                isloading&&
+                !isloading&&
                 isValidDelay&&
                 mLoadListener!=null){
+            isValidDelay=false;
+            mLoadListener.onLoad();
            postDelayed(new Runnable() {
                @Override
                public void run() {

@@ -38,7 +38,7 @@ private List<Article> mDataSet=new ArrayList<>();
          final   Article item=getItem(position);
         holder.title.setText(item.title);
         holder.author.setText(item.author);
-        holder.time.setText(item.title);
+        holder.time.setText(item.publishTime);
         setupItemViewClickListener(holder,item);
     }
 

@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,6 +65,7 @@ public class ArticleFragment extends Fragment implements SwipeRefreshLayout.OnRe
     public void onResume() {
         super.onResume();
         mDataSet.addAll(DatabaseHelper.getInstance().getArticles());
+        Log.i("this", "onResume: "+mDataSet.size());
         adapter.notifyDataSetChanged();
     }
 
@@ -94,9 +96,9 @@ public class ArticleFragment extends Fragment implements SwipeRefreshLayout.OnRe
         Intent intent=new Intent(getActivity(),ContentActivity.class);
         intent.putExtra("post_id",item.post_id);
         intent.putExtra("title",item.title);
-        getActivity().startActivity(intent);
+        startActivity(intent);
     }
-    private void getArticles(int page){
+    private void getArticles(final int page){
         new AsyncTask<Void,Void,List<Article>>(){
             @Override
             protected void onPreExecute() {
@@ -105,13 +107,16 @@ public class ArticleFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
             @Override
             protected List<Article> doInBackground(Void... params) {
-                return performRequest(mPageIndex);
+                return performRequest(page);
             }
 
             @Override
             protected void onPostExecute(List<Article> articles) {
+                Log.i("this", "onPostExecute: "+articles.size());
                 articles.removeAll(mDataSet);
+                Log.i("this", "onPostExecute: "+articles.size());
                 mDataSet.addAll(articles);
+                Log.i("this", "onPostExecute: "+mDataSet.size());
                 adapter.notifyDataSetChanged();
                 fragmentArticleSwipe.setRefreshing(false);
 //                  // 存储文章列表
@@ -127,7 +132,7 @@ public class ArticleFragment extends Fragment implements SwipeRefreshLayout.OnRe
         HttpURLConnection urlConnection=null;
         try{
             String getUrl =
-                    "http://www.devtf.cn/api/v1/?type=articles&page=" + mPageIndex
+                    "http://www.devtf.cn/api/v1/?type=articles&page=" + page
                             + "&count=20&category=1";
             urlConnection= (HttpURLConnection) new URL(getUrl).openConnection();
             urlConnection.connect();

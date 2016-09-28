@@ -1,6 +1,8 @@
 package adapters;
 
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.RecyclerView.Adapter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,12 +20,13 @@ import listener.OnItemClickListener;
 /**
  * Created by Administrator on 2016/9/14.
  */
-public  class Menuadapter extends RecyclerView.Adapter<Menuadapter.MenuViewHolder> {
+public  class Menuadapter extends Adapter<Menuadapter.MenuViewHolder> {
     List<MenuItem> mDataSet=new ArrayList<>();
     OnItemClickListener<MenuItem> mItemClickListener;
-
+    private static final  String TAG="Menuadapter";
     public Menuadapter(List<MenuItem> mDataSet) {
         this.mDataSet = mDataSet;
+        Log.i(TAG, "Menuadapter: "+mDataSet.size());
     }
 
     @Override
@@ -35,6 +38,7 @@ public  class Menuadapter extends RecyclerView.Adapter<Menuadapter.MenuViewHolde
     @Override
     public void onBindViewHolder(MenuViewHolder holder, int position) {
         final MenuItem item=mDataSet.get(position);
+        Log.i(TAG, "Menuadapter: "+item.getName());
         holder.nameTextView.setText(item.getName());
         holder.userImageView.setImageResource(item.getResId());
         setupItemViewClickListener(holder,item);
@@ -62,13 +66,13 @@ public  class Menuadapter extends RecyclerView.Adapter<Menuadapter.MenuViewHolde
    protected  MenuItem getItem(int postion){
        return mDataSet.get(postion);
    }
-    protected static class MenuViewHolder extends RecyclerView.ViewHolder{
+     static class MenuViewHolder extends RecyclerView.ViewHolder{
         public ImageView userImageView;
         public TextView nameTextView;
         public MenuViewHolder(View itemView) {
             super(itemView);
-            userImageView = (ImageView) itemView.findViewById(R.id.main_user_icon);
-            nameTextView = (TextView) itemView.findViewById(R.id.main_username);
+            userImageView = (ImageView) itemView.findViewById(R.id.menu_icon_imageview);
+            nameTextView = (TextView) itemView.findViewById(R.id.menu_text_tv);
         }
 
     }

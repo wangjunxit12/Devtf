@@ -2,7 +2,6 @@ package com.example.devtf.devtf;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -43,14 +42,14 @@ public class ContentActivity extends AppCompatActivity {
     private String title;
     private String mJobUrl;
     @Override
-    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
         ButterKnife.inject(this);
 
         toolbar.setTitle(R.string.app_name);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,6 +73,7 @@ public class ContentActivity extends AppCompatActivity {
             public void onProgressChanged(WebView view, int newProgress) {
                 progressbar.setVisibility(View.VISIBLE);
                 progressbar.setProgress(newProgress);
+
                 if(newProgress==100){
                     progressbar.setVisibility(View.GONE);
                 }
@@ -84,7 +84,7 @@ public class ContentActivity extends AppCompatActivity {
         if(bundle!=null&&!bundle.containsKey("job_url")) {
             post_id = bundle.getString("post_id");
             title=bundle.getString("title");
-
+            Log.i("Menuadapter", "onCreate: "+post_id);
         }else{
             mJobUrl=bundle.getString("job_url");
             webview.loadUrl(mJobUrl);
@@ -92,7 +92,7 @@ public class ContentActivity extends AppCompatActivity {
         ArticleDetail detail=DatabaseHelper.getInstance().getArticleDetail(post_id);
         if(!TextUtils.isEmpty(detail.getContent())){
            loadArticletoWebView(detail.getContent());
-        }else if(TextUtils.isEmpty(post_id)){
+        }else if(!TextUtils.isEmpty(post_id)){
             getArticleContent();
         }else{
             webview.loadUrl(mJobUrl);
@@ -132,7 +132,7 @@ public class ContentActivity extends AppCompatActivity {
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
                 loadArticletoWebView(s);
-                DatabaseHelper.getInstance().getArticleDetail(s);
+                DatabaseHelper.getInstance().saveArticleDetail(new ArticleDetail(s,post_id));
             }
         }.execute();
     }

@@ -19,7 +19,7 @@ import bean.ArticleDetail;
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TABLE_ARTICLE="article";
     private static final String TABLE_ARTICLE_CONTENT="article_content";
-    private static final String CREATE_ARTICLES_TABLE_SQL = "CREATE TABLE articles (  "
+    private static final String CREATE_ARTICLES_TABLE_SQL = "CREATE TABLE article(  "
             + " post_id INTEGER PRIMARY KEY UNIQUE, "
             + " author VARCHAR(30) NOT NULL ,"
             + " title VARCHAR(50) NOT NULL,"
@@ -50,8 +50,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     @Override
     public void onCreate(SQLiteDatabase db) {
-          db.execSQL(TABLE_ARTICLE);
-          db.execSQL(TABLE_ARTICLE_CONTENT);
+          db.execSQL(CREATE_ARTICLES_TABLE_SQL);
+          db.execSQL(CREATE_ARTICLE_CONTENT_TABLE_SQL);
     }
 
     @Override
@@ -74,7 +74,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return  values;
     }
     public List<Article> getArticles(){
-        Cursor cursor=database.rawQuery("select * from "+TABLE_ARTICLE,null);
+        Cursor cursor=database.rawQuery("select * from "+TABLE_ARTICLE+" order by publish_time desc"
+                ,null);
         List<Article> result=parseArticles(cursor);
         cursor.close();
         return  result;
@@ -99,8 +100,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     public ArticleDetail getArticleDetail(String postid){
         Cursor cursor=database.rawQuery("select * from "+TABLE_ARTICLE_CONTENT
-                +"where post_id="+postid,null);
+                +" where post_id = "+postid,null);
         ArticleDetail detail=new ArticleDetail(parseArticleContent(cursor),postid);
+        cursor.close();
         return detail;
     }
     private String parseArticleContent(Cursor cursor){
