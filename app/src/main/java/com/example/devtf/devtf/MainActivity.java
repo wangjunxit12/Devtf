@@ -67,7 +67,8 @@ public class MainActivity extends AppCompatActivity {
         items.add(new MenuItem(getString(R.string.about_menu), R.drawable.about));
         items.add(new MenuItem(getString(R.string.exit), R.drawable.exit));
 
-        Menuadapter adapter = new Menuadapter(items);
+        Menuadapter adapter = new Menuadapter();
+        adapter.addItems(items);
         Log.i("Menuadapter", "onCreate:测试 "+items.get(0)+"结尾");
         adapter.setOnItemClickListener(new OnItemClickListener<MenuItem>() {
             @Override
